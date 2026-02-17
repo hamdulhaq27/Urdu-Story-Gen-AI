@@ -36,9 +36,6 @@ def detokenize(tokens):
     # Join tokens with spaces
     text = " ".join(clean_tokens)
 
-    # Remove extra spaces
-    text = re.sub(r"\s+", " ", text).strip()
-
     return text
 
 # Predict next token with robust fallback
