@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 263 70% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 263 40% 14%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 263 40% 14%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 60% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 263 30% 18%;
+    --muted-foreground: 260 10% 65%;
+
+    --accent: 190 80% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 263 30% 22%;
+    --input: 263 30% 20%;
+    --ring: 263 70% 58%;
+
+    --radius: 0.75rem;
+
+    --glass-bg: 263 40% 16%;
+    --glass-border: 263 30% 28%;
+
+    --sidebar-background: 263 40% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 263 30% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 263 30% 22%;
+    --sidebar-ring: 263 70% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-urdu {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    line-height: 2.2;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: hsl(var(--glass-bg) / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border) / 0.3);
+  }
+
+  .bg-gradient-main {
+    background: linear-gradient(135deg, hsl(263 70% 12%), hsl(240 60% 10%), hsl(263 70% 8%));
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.3), 0 0 60px hsl(var(--primary) / 0.1);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.3);
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes word-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+  50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+.animate-word-in {
+  animation: word-fade-in 0.3s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
