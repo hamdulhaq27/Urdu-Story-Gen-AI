@@ -37,7 +37,7 @@ jobs:
           pip install pytest httpx  # httpx needed for FastAPI TestClient
 
       - name: Run tests
-        run: pytest tests/ -v
+        run: PYTHONPATH=. pytest tests/ -v
 
   # ─────────────────────────────────────────────
   # 2. BUILD & PUSH DOCKER IMAGE
