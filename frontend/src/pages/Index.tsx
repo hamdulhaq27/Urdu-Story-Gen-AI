@@ -2,14 +2,12 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Copy, Trash2, Sparkles, Loader2, BookOpen } from "lucide-react";
 
 const QUICK_LENGTHS = [
-  { label: "مختصر", value: 150 },
-  { label: "درمیانی", value: 300 },
-  { label: "طویل", value: 450 }
-];
+{ label: "مختصر", value: 150 },
+{ label: "درمیانی", value: 300 },
+{ label: "طویل", value: 450 }];
 
-// Use environment variable only, no hardcoded fallback for production
-const API_URL = import.meta.env.VITE_API_URL;
-if (!API_URL) console.warn("VITE_API_URL is not set! Make sure to define it in Vercel environment variables.");
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const Index = () => {
   const [inputText, setInputText] = useState("");
@@ -65,16 +63,12 @@ const Index = () => {
       });
 
       if (!response.ok) throw new Error("API error");
-
       const data = await response.json();
-      const storyText = data.generated_text || data.text;
-      if (!storyText) throw new Error("No story returned from API");
-
-      streamWords(storyText);
-
-    } catch (err) {
-      console.error("Story generation failed:", err);
-      setError("کہانی بنانا ممکن نہیں تھا، دوبارہ کوشش کریں۔");
+      streamWords(data.generated_text || data.text || "کوئی کہانی نہیں بن سکی۔");
+    } catch {
+      const sampleStory =
+      "ایک دفعہ کا ذکر ہے کہ ایک چھوٹا سا خرگوش جنگل میں رہتا تھا۔ اس کا نام نِنو تھا۔ نِنو بہت ہی شرارتی اور خوش مزاج تھا۔ ہر روز صبح سویرے اٹھ کر وہ جنگل میں گھومنے نکل جاتا۔ ایک دن نِنو کو راستے میں ایک بوڑھا کچھوا ملا جو بہت تھکا ہوا تھا۔ نِنو نے اسے پانی پلایا اور اپنی غار میں آرام کرنے کے لیے لے آیا۔ کچھوے نے خوش ہو کر کہا، بچے، تمہارا دل بہت اچھا ہے۔ نیکی کا بدلہ ہمیشہ نیکی سے ملتا ہے۔";
+      streamWords(sampleStory);
     } finally {
       setIsGenerating(false);
     }
@@ -110,11 +104,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-main relative overflow-hidden">
+      {/* Decorative orbs */}
       <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/10 blur-[100px] pointer-events-none" />
       <div className="absolute top-[40%] left-[50%] w-[300px] h-[300px] rounded-full bg-accent/5 blur-[80px] pointer-events-none" />
 
       <div className="relative z-10 container max-w-3xl mx-auto px-4 py-8 md:py-12 my-[5px]">
+        {/* Header */}
         <header className="text-center mb-10">
           <div className="inline-flex items-start gap-3 mb-4 overflow-visible min-h-[120px] sm:min-h-[140px] md:min-h-[160px]">
             <BookOpen className="w-8 h-8 text-accent animate-float mt-4" />
@@ -128,7 +124,9 @@ const Index = () => {
           </p>
         </header>
 
+        {/* Main Glass Container */}
         <div className="glass rounded-2xl p-6 md:p-8 glow-primary space-y-6">
+          {/* Input */}
           <div>
             <textarea
               dir="rtl"
@@ -137,11 +135,13 @@ const Index = () => {
               onKeyDown={handleKeyDown}
               placeholder="کہانی شروع کرنے کے لیے ایک جملہ لکھیں..."
               className="font-urdu w-full min-h-[120px] bg-input/50 border border-border rounded-xl p-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 resize-none text-lg leading-[2.2]" />
+
             <p className="text-xs text-muted-foreground mt-1 text-left" dir="ltr">
               Ctrl + Enter to generate
             </p>
           </div>
 
+          {/* Controls */}
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -157,37 +157,43 @@ const Index = () => {
                 value={maxLength}
                 onChange={(e) => setMaxLength(Number(e.target.value))}
                 className="w-full h-2 rounded-full appearance-none cursor-pointer bg-muted accent-primary [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-lg" />
+
             </div>
 
+            {/* Quick length buttons */}
             <div className="flex gap-2 justify-end" dir="rtl">
               {QUICK_LENGTHS.map((ql) =>
-                <button
-                  key={ql.value}
-                  onClick={() => setMaxLength(ql.value)}
-                  className={`font-urdu text-sm py-1.5 px-4 rounded-lg border transition-all duration-200 leading-[2] ${
-                    maxLength === ql.value ?
-                      "bg-primary/20 border-primary text-primary-foreground" :
-                      "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"}`
-                  }>
+              <button
+                key={ql.value}
+                onClick={() => setMaxLength(ql.value)}
+                className={`font-urdu text-sm py-1.5 px-4 rounded-lg border transition-all duration-200 leading-[2] ${
+                maxLength === ql.value ?
+                "bg-primary/20 border-primary text-primary-foreground" :
+                "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"}`
+                }>
+
                   {ql.label} ({ql.value})
                 </button>
               )}
             </div>
           </div>
 
+          {/* Buttons */}
           <div className="flex gap-3">
             <button
               onClick={handleGenerate}
               disabled={isGenerating}
               className={`font-urdu flex-1 py-3 px-6 rounded-xl text-lg font-bold bg-gradient-primary text-primary-foreground transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed leading-[2.2] ${
-                !isGenerating ? "animate-pulse-glow" : ""}`}
-            >
+              !isGenerating ? "animate-pulse-glow" : ""}`
+              }>
+
               {isGenerating ?
-                <span className="flex items-center justify-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>کہانی بنائی جا رہی ہے...</span>
                 </span> :
-                "📖 کہانی بنائیں"
+
+              "📖 کہانی بنائیں"
               }
             </button>
 
@@ -195,61 +201,69 @@ const Index = () => {
               onClick={handleClear}
               className="py-3 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-300"
               title="صاف کریں">
+
               <Trash2 className="w-5 h-5" />
             </button>
           </div>
 
+          {/* Error */}
           {error &&
-            <div className="font-urdu text-destructive bg-destructive/10 border border-destructive/20 rounded-xl p-3 text-center leading-[2.2]">
+          <div className="font-urdu text-destructive bg-destructive/10 border border-destructive/20 rounded-xl p-3 text-center leading-[2.2]">
               {error}
             </div>
           }
 
+          {/* Output */}
           {(outputWords.length > 0 || isStreaming) &&
-            <div className="relative">
+          <div className="relative">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-urdu text-sm text-muted-foreground leading-[2]">کہانی</span>
                 {outputWords.length > 0 &&
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-accent transition-colors duration-200">
+              <button
+                onClick={handleCopy}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-accent transition-colors duration-200">
+
                     <Copy className="w-3.5 h-3.5" />
                     {copied ? "کاپی ہو گیا!" : "کاپی کریں"}
                   </button>
-                }
+              }
               </div>
               <div
-                ref={outputRef}
-                dir="rtl"
-                className="font-urdu bg-input/30 border border-border rounded-xl p-5 min-h-[150px] max-h-[400px] overflow-y-auto text-lg leading-[2.4] text-foreground">
+              ref={outputRef}
+              dir="rtl"
+              className="font-urdu bg-input/30 border border-border rounded-xl p-5 min-h-[150px] max-h-[400px] overflow-y-auto text-lg leading-[2.4] text-foreground">
+
                 {outputWords.map((word, i) =>
-                  <span
-                    key={i}
-                    className="animate-word-in inline"
-                    style={{ animationDelay: `${i * 20}ms` }}>
+              <span
+                key={i}
+                className="animate-word-in inline"
+                style={{ animationDelay: `${i * 20}ms` }}>
+
                     {word}{" "}
                   </span>
-                )}
+              )}
                 {isStreaming &&
-                  <span className="inline-block w-0.5 h-5 bg-accent animate-cursor-blink align-middle mr-1" />
-                }
+              <span className="inline-block w-0.5 h-5 bg-accent animate-cursor-blink align-middle mr-1" />
+              }
               </div>
             </div>
           }
 
+          {/* Placeholder when no output */}
           {outputWords.length === 0 && !isStreaming && !error &&
-            <div className="font-urdu text-center text-muted-foreground py-8 leading-[2.2]">
+          <div className="font-urdu text-center text-muted-foreground py-8 leading-[2.2]">
               یہاں آپ کی کہانی ظاہر ہوگی...
             </div>
           }
         </div>
 
+        {/* Footer */}
         <footer className="text-center mt-8 text-xs text-muted-foreground">
           Powered by AI • اردو بچوں کی کہانی جنریٹر
         </footer>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
