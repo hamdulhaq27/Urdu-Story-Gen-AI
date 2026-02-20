@@ -7,11 +7,9 @@ import os
 app = FastAPI(title="Urdu Story Generator API")
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-# After Vercel deployment, set this env var on your server:
-# ALLOWED_ORIGINS=https://your-app.vercel.app
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:3000"   # dev default
+    "http://localhost:3000"
 ).split(",")
 
 app.add_middleware(
@@ -33,5 +31,6 @@ def health():
 
 @app.post("/generate")
 def generate(request: GenerateRequest):
+    # Every request generates a unique story
     story = generate_story(request.prefix, request.max_length)
     return {"generated_story": story}
