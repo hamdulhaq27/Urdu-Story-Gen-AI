@@ -112,12 +112,12 @@ const Index = () => {
       <div className="relative z-10 container max-w-3xl mx-auto px-4 py-8 md:py-12 my-[5px]">
         {/* Header */}
         <header className="text-center mb-10">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <BookOpen className="w-8 h-8 text-accent animate-float" />
-            <h1 className="font-urdu text-4xl md:text-5xl font-bold text-gradient leading-[2.4] my-0 py-0 px-[15px] mx-px text-left">
+          <div className="inline-flex items-start gap-3 mb-4 overflow-visible min-h-[120px] sm:min-h-[140px] md:min-h-[160px]">
+            <BookOpen className="w-8 h-8 text-accent animate-float mt-4" />
+            <h1 className="font-urdu text-3xl sm:text-4xl md:text-5xl font-bold text-gradient leading-[4] py-6 overflow-visible">
               ​اردو کہانی جنریٹر
             </h1>
-            <Sparkles className="w-8 h-8 text-accent animate-float" style={{ animationDelay: "1s" }} />
+            <Sparkles className="w-8 h-8 text-accent animate-float mt-4" style={{ animationDelay: "1s" }} />
           </div>
           <p className="font-urdu text-lg text-muted-foreground leading-[2.2]">
             AI سے بچوں کے لیے اردو کہانیاں بنائیں
